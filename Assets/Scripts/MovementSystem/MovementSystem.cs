@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,7 +11,7 @@ public class MovementSystem : MonoBehaviour {
     
     Rigidbody2D _rb;
     BoxCollider2D _collider;
-    public LayerMask platformMask;
+    [SerializeField] LayerMask platformMask;
     
     MovementStrategy.Context _ctx;
     MovementStrategy _currentStrategy;
@@ -76,7 +75,6 @@ public class MovementSystem : MonoBehaviour {
         _currentStrategy = newStrategy;
         _currentStrategy.OnStart();
         _onStrategyStart.GetValueOrDefault(newStrategy.type)?.Invoke();
-        // _onStrategyStart.
     }
 
     public void Move(int hInput, int vInput, bool jumpStartInput, bool jumpContInput, float deltaTime) {
