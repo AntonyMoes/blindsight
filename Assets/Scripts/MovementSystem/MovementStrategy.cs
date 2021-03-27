@@ -115,7 +115,7 @@ public abstract class MovementStrategy {
     protected Collider2D GetWall(int direction) {
         var bounds = _ctx.collider.bounds;
         var boxPosY = bounds.min.y + bounds.size.y * 0.5f;
-        var boxSize = new Vector2(_wallEpsX, bounds.size.y);
+        var boxSize = new Vector2(_wallEpsX, bounds.size.y - 2 * _ctx.minDistToWall);
         
         Func<int, Vector2> getBoxPosition = (dir) => {
             var colliderBoundX = dir == Left ? bounds.min.x : bounds.max.x;
