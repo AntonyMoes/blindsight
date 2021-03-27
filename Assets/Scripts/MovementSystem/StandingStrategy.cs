@@ -6,7 +6,7 @@ using UnityEngine;
 public class StandingStrategy : MovementStrategy {
     // readonly float _jumpForce = 25;
     
-    public StandingStrategy(Context ctx) : base(ctx) {}
+    public StandingStrategy(Context ctx) : base(ctx, MovementStrategyT.Standing) {}
 
     public override Func<Context, MovementStrategy> Move(int hInput, int vInput, bool jumpStartInput,
         bool jumpContInput, float deltaTime) {

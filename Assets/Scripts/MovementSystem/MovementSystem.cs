@@ -3,27 +3,80 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MovementSystem : MonoBehaviour {
+    [SerializeField] float moveSpeed = 12;
+    // TODO: are you sure this wariable should be placed here? Cause I am not
+    [SerializeField] float minDistToWall = 0.022f;
+    
+    Rigidbody2D _rb;
+    BoxCollider2D _collider;
+    public LayerMask platformMask;
+    
     MovementStrategy.Context _ctx;
     MovementStrategy _currentStrategy;
+    
+    [Serializable]
+    struct ActionPair {
+        public MovementStrategyT type;
+        public UnityEvent actions;
+    }
+    [Serializable]
+    struct ActionTriple {
+        public MovementStrategyT type1;
+        public MovementStrategyT type2;
+        public UnityEvent actions;
+    }
+    
+    [SerializeField] List<ActionPair> onStarts;
+    [SerializeField] List<ActionPair> onEnds;
+    [SerializeField] List<ActionTriple> onTransitions;
+    
+    Dictionary<MovementStrategyT, UnityEvent> _onStrategyStart = new Dictionary<MovementStrategyT, UnityEvent>();
+    Dictionary<MovementStrategyT, UnityEvent> _onStrategyEnd = new Dictionary<MovementStrategyT, UnityEvent>();
+    Dictionary<(MovementStrategyT, MovementStrategyT), UnityEvent> _onStrategyTransition = new Dictionary<(MovementStrategyT, MovementStrategyT), UnityEvent>();
+
     Collider2D[] _overlapBoxResults;
     const int MaxColliders = 10;
 
     void Start() {
+        _rb = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<BoxCollider2D>();
+        _ctx = new MovementStrategy.Context(_rb, _collider, moveSpeed, platformMask, minDistToWall);
         _overlapBoxResults = new Collider2D[MaxColliders];
+        InitializeCallbacks();
+        SetStrategy(context => new StandingStrategy(context));
     }
 
-    public void SetStrategy(Func<MovementStrategy.Context, MovementStrategy> inst) {
-        _currentStrategy?.OnFinish();
+    void InitializeCallbacks() {
+        foreach (var actionPair in onStarts) {
+            _onStrategyStart.Add(actionPair.type, actionPair.actions);
+        }
+        foreach (var actionPair in onEnds) {
+            _onStrategyEnd.Add(actionPair.type, actionPair.actions);
+        }
+        foreach (var actionTriple in onTransitions) {
+            _onStrategyTransition.Add((actionTriple.type1, actionTriple.type2), actionTriple.actions);
+        }
+    }
+
+    void SetStrategy(Func<MovementStrategy.Context, MovementStrategy> inst) {
+        if (_currentStrategy != null) {
+            _currentStrategy.OnFinish();
+            _onStrategyEnd.GetValueOrDefault(_currentStrategy.type)?.Invoke();
+        }
+
         var newStrategy = inst(_ctx);
-        Debug.Log("Changed strategy " + _currentStrategy?.GetType() + " -> " + newStrategy.GetType());
+        // Debug.Log("Changed strategy " + _currentStrategy?.GetType() + " -> " + newStrategy.GetType());
+        if (_currentStrategy != null) {
+            _onStrategyTransition.GetValueOrDefault((_currentStrategy.type, newStrategy.type))?.Invoke();
+        }
+        
         _currentStrategy = newStrategy;
         _currentStrategy.OnStart();
-    }
-
-    public void SetContext(MovementStrategy.Context ctx) {
-        _ctx = ctx;
+        _onStrategyStart.GetValueOrDefault(newStrategy.type)?.Invoke();
+        // _onStrategyStart.
     }
 
     public void Move(int hInput, int vInput, bool jumpStartInput, bool jumpContInput, float deltaTime) {
@@ -84,9 +137,5 @@ public class MovementSystem : MonoBehaviour {
         var finalScale = Mathf.Min(getMinimalScale(X), getMinimalScale(Y));
         _ctx.rb.velocity *= finalScale;
         // TODO: Maybe ignore movement if its magnitude is less then 0.01
-        
-        // if (!Mathf.Approximately(finalScale, 1)) {
-        //     Debug.Log("Using scale to prevent collision: " + finalScale + "\nMovement magnitude: " + (_ctx.rb.velocity * deltaTime).magnitude);
-        // }
     }
 }

@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FixedMovementStrategy : MovementStrategy {
+public abstract class FixedMovementStrategy : MovementStrategy {
     readonly Vector2 _velocity;
     readonly float _duration;
     float _currentDuration;
 
-    public FixedMovementStrategy(Context ctx, Vector2 velocity, float duration) : base(ctx) {
+    public FixedMovementStrategy(Context ctx, MovementStrategyT type, Vector2 velocity, float duration) : base(ctx, type) {
         _velocity = velocity;
         _duration = duration;
     }
@@ -50,5 +50,5 @@ public class WallJumpStrategy : FixedMovementStrategy {
         return jumpDirection * _jumpSpeed;
     }
 
-    public WallJumpStrategy(Context ctx, int wallDirection) : base(ctx, GetVelocity(wallDirection), _jumpDuration) {}
+    public WallJumpStrategy(Context ctx, int wallDirection) : base(ctx, MovementStrategyT.WallJump, GetVelocity(wallDirection), _jumpDuration) {}
 }

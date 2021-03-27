@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum MovementStrategyT {
+    Standing,
+    Falling,
+    WallClinging,
+    CliffHanging,
+    WallJump,
+}
 public abstract class MovementStrategy {
     public class Context {
         public Context(Rigidbody2D rb, Collider2D collider, float baseSpeed, LayerMask platformMask, float minDistToWall) {
@@ -27,12 +34,15 @@ public abstract class MovementStrategy {
     protected const int Right = 1;
     protected const int Below = -1;
     protected const int Above = 1;
+
+    public readonly MovementStrategyT type;
     
     // TODO: maybe place all these Physics-Hacks into one place
     protected readonly float _wallEpsX = 0.04f;
     
-    public MovementStrategy(Context ctx) {
+    public MovementStrategy(Context ctx, MovementStrategyT t) {
         _ctx = ctx;
+        type = t;
     }
 
     /**

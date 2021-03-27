@@ -6,7 +6,7 @@ using UnityEngine;
 public class WallClingingStrategy : MovementStrategy {
     readonly float _maxSlidingSpeed = 6;
     
-    public WallClingingStrategy(Context ctx) : base(ctx) {}
+    public WallClingingStrategy(Context ctx) : base(ctx, MovementStrategyT.WallClinging) {}
 
     public override Func<Context, MovementStrategy> Move(int hInput, int vInput, bool jumpStartInput,
         bool jumpContInput, float deltaTime) {

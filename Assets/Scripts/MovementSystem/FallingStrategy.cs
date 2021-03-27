@@ -11,7 +11,7 @@ public class FallingStrategy : MovementStrategy {
     float _remainingJumpDuration;
     bool _isJumping;
 
-    public FallingStrategy(Context ctx, bool isJumping = false) : base(ctx) {
+    public FallingStrategy(Context ctx, bool isJumping = false) : base(ctx, MovementStrategyT.Falling) {
         _isJumping = isJumping;
     }
     

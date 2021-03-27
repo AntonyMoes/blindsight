@@ -265,11 +265,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851d80a98b79f964684999af7612c485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 12
-  minDistToWall: 0.022
-  platformMask:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &480545011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,6 +277,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e8815d52ae6765458b4ec0b9859315d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 12
+  minDistToWall: 0.022
+  platformMask:
+    serializedVersion: 2
+    m_Bits: 256
+  onStarts: []
+  onEnds: []
+  onTransitions: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

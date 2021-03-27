@@ -6,7 +6,7 @@ using UnityEngine;
 public class CliffHangingStrategy : MovementStrategy {
     float _savedGravityScale;
     
-    public CliffHangingStrategy(Context ctx) : base(ctx) { }
+    public CliffHangingStrategy(Context ctx) : base(ctx, MovementStrategyT.CliffHanging) { }
     
     public override Func<Context, MovementStrategy> Move(int hInput, int vInput, bool jumpStartInput, bool jumpContInput, float deltaTime) {
         var wallDirection = IsNearWall();
