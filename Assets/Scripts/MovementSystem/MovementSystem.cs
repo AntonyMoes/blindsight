@@ -6,12 +6,11 @@ using UnityEngine.Events;
 
 public class MovementSystem : MonoBehaviour {
     [SerializeField] float moveSpeed = 12;
-    // TODO: are you sure this wariable should be placed here? Cause I am not
-    [SerializeField] float minDistToWall = 0.022f;
     
     Rigidbody2D _rb;
     BoxCollider2D _collider;
     [SerializeField] LayerMask platformMask;
+    [SerializeField] PhysicsConstants physicsConstants;
     
     MovementStrategy.Context _ctx;
     MovementStrategy _currentStrategy;
@@ -42,7 +41,7 @@ public class MovementSystem : MonoBehaviour {
     void Start() {
         _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
-        _ctx = new MovementStrategy.Context(_rb, _collider, moveSpeed, platformMask, minDistToWall);
+        _ctx = new MovementStrategy.Context(_rb, _collider, moveSpeed, platformMask, physicsConstants);
         _overlapBoxResults = new Collider2D[MaxColliders];
         InitializeCallbacks();
         SetStrategy(context => new StandingStrategy(context));

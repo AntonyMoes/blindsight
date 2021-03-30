@@ -13,19 +13,19 @@ public enum MovementStrategyT {
 }
 public abstract class MovementStrategy {
     public class Context {
-        public Context(Rigidbody2D rb, Collider2D collider, float baseSpeed, LayerMask platformMask, float minDistToWall) {
+        public Context(Rigidbody2D rb, Collider2D collider, float baseSpeed, LayerMask platformMask, PhysicsConstants physicsConstants) {
             this.rb = rb;
             this.collider = collider;
             this.baseSpeed = baseSpeed;
             this.platformMask = platformMask;
-            this.minDistToWall = minDistToWall;
+            this.physicsConstants = physicsConstants;
         }
 
         public readonly Rigidbody2D rb;
         public readonly Collider2D collider;
         public readonly float baseSpeed;
         public readonly LayerMask platformMask;
-        public readonly float minDistToWall;
+        public readonly PhysicsConstants physicsConstants;
     }
 
     protected Context _ctx;
@@ -37,9 +37,6 @@ public abstract class MovementStrategy {
 
     public readonly MovementStrategyT type;
     
-    // TODO: maybe place all these Physics-Hacks into one place
-    protected readonly float _wallEpsX = 0.04f;
-    
     public MovementStrategy(Context ctx, MovementStrategyT t) {
         _ctx = ctx;
         type = t;
@@ -49,14 +46,13 @@ public abstract class MovementStrategy {
      * 1 - above, -1 - below
      */
     protected Collider2D WallAboveOrBelow(int direction) {
-        var epsX = _ctx.minDistToWall;
-        // TODO: this too
-        var epsY = 0.06f;
+        var minDistToWall = _ctx.physicsConstants.MinDistToWall;
+        var wallCheckDepth = _ctx.physicsConstants.WallCheckDepth;
 
         var bounds = _ctx.collider.bounds;
-        var boxPosY = direction == Below ? bounds.min.y - epsY / 2 : bounds.max.y + epsY / 2;
+        var boxPosY = direction == Below ? bounds.min.y - wallCheckDepth / 2 : bounds.max.y + wallCheckDepth / 2;
         var boxPos = new Vector2(bounds.center.x, boxPosY);
-        var boxSize = new Vector2(bounds.size.x - epsX * 2, epsY);
+        var boxSize = new Vector2(bounds.size.x - minDistToWall * 2, wallCheckDepth);
         var hit = Physics2D.OverlapBox(boxPos, boxSize, 0, _ctx.platformMask);
         
         var color = hit != null ? Color.green : Color.red;
@@ -74,10 +70,11 @@ public abstract class MovementStrategy {
     
     protected int IsWalled() {
         var bounds = _ctx.collider.bounds;
-        var boxSize = new Vector2(_wallEpsX, bounds.size.y * 0.05f);
+        var wallCheckDepth = _ctx.physicsConstants.WallCheckDepth;
+        var boxSize = new Vector2(wallCheckDepth, bounds.size.y * 0.05f);
         Func<int, Vector2[]> getBoxPositions = (direction) => {
             var colliderBoundX = direction == Left ? bounds.min.x : bounds.max.x;
-            var boxPosX = colliderBoundX + direction * _wallEpsX / 2;
+            var boxPosX = colliderBoundX + direction * wallCheckDepth / 2;
             var boxPosY1 = bounds.min.y + bounds.size.y * 0.225f;
             var boxPosY2 = bounds.min.y + bounds.size.y * 0.55f;
             var boxPosY3 = bounds.min.y + bounds.size.y * 0.875f;
@@ -113,13 +110,16 @@ public abstract class MovementStrategy {
     }
     
     protected Collider2D GetWall(int direction) {
+        var minDistToWall = _ctx.physicsConstants.MinDistToWall;
+        var wallCheckDepth = _ctx.physicsConstants.WallCheckDepth;
+        
         var bounds = _ctx.collider.bounds;
-        var boxPosY = bounds.min.y + bounds.size.y * 0.5f;
-        var boxSize = new Vector2(_wallEpsX, bounds.size.y - 2 * _ctx.minDistToWall);
+        var boxPosY = bounds.min.y + bounds.size.y / 2;
+        var boxSize = new Vector2(wallCheckDepth, bounds.size.y - minDistToWall * 2);
         
         Func<int, Vector2> getBoxPosition = (dir) => {
             var colliderBoundX = dir == Left ? bounds.min.x : bounds.max.x;
-            var boxPosX = colliderBoundX + dir * _wallEpsX / 2;
+            var boxPosX = colliderBoundX + dir * wallCheckDepth / 2;
 
             return new Vector2(boxPosX, boxPosY);
         };
@@ -147,7 +147,7 @@ public abstract class MovementStrategy {
         }
 
         // TODO: maybe tweak this (and walled check accordingly)
-        var yEps = _ctx.collider.bounds.size.y * 0.2;
+        var yEps = _ctx.collider.bounds.size.y * 0.2f;
 
         var yDiff = potentialCliff.bounds.max.y - _ctx.collider.bounds.max.y;
         if (Mathf.Abs(yDiff) > yEps) {
@@ -158,10 +158,12 @@ public abstract class MovementStrategy {
     }
 
     protected void MoveToWall(int direction, Collider2D wall) {
+        var minDistToWall = _ctx.physicsConstants.MinDistToWall;
+        
         var wallX = direction == -1 ? wall.bounds.max.x : wall.bounds.min.x;
         var bodyX = direction == -1 ? _ctx.collider.bounds.min.x : _ctx.collider.bounds.max.x;
 
-        var delta = wallX - bodyX - (direction * _ctx.minDistToWall);
+        var delta = wallX - bodyX - (direction * minDistToWall);
         
         _ctx.rb.MovePosition(_ctx.rb.position + new Vector2(delta, 0));
     }
