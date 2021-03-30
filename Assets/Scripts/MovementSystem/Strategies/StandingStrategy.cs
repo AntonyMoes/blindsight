@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StandingStrategy : MovementStrategy {
-    // readonly float _jumpForce = 25;
-    
     public StandingStrategy(Context ctx) : base(ctx, MovementStrategyT.Standing) {}
 
     public override Func<Context, MovementStrategy> Move(int hInput, int vInput, bool jumpStartInput,
@@ -23,7 +21,7 @@ public class StandingStrategy : MovementStrategy {
         }
 
         // TODO: do something about not being able to jump when running into wall
-        var hVelocity = hInput * _ctx.baseSpeed;
+        var hVelocity = hInput * _ctx.movementConstants.MoveSpeed;
         _ctx.rb.velocity = new Vector2(hVelocity, _ctx.rb.velocity.y);
         return null;
     }

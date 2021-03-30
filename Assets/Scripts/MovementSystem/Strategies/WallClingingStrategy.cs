@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WallClingingStrategy : MovementStrategy {
-    readonly float _maxSlidingSpeed = 6;
+    // readonly float _maxWallSlidingSpeed = 6;
     
     public WallClingingStrategy(Context ctx) : base(ctx, MovementStrategyT.WallClinging) {}
 
@@ -20,13 +20,11 @@ public class WallClingingStrategy : MovementStrategy {
         }
         
         if (jumpStartInput) {
-            // var jumpDirection = CustomMath.Vector2FromAngle(90 + wallDirection * (90 - _jumpAngle));
-            // var jumpVelocity = jumpDirection * _jumpSpeed;
-            // return ctx => new FixedMovementStrategy(ctx, jumpVelocity, _jumpDuration);
             return ctx => new WallJumpStrategy(ctx, wallDirection);
         }
 
-        var yVelocity = Mathf.Max(_ctx.rb.velocity.y, -_maxSlidingSpeed);
+        var maxWallSlidingSpeed = _ctx.movementConstants.MaxWallSlidingSpeed;
+        var yVelocity = Mathf.Max(_ctx.rb.velocity.y, -maxWallSlidingSpeed);
         _ctx.rb.velocity = new Vector2(0, yVelocity);
         
         return null;

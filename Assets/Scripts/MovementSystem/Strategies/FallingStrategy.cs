@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FallingStrategy : MovementStrategy {
-    readonly float _maxFallingSpeed = 24;
-    readonly float _jumpSpeed = 18;
-    readonly float _maxJumpDuration = 0.4f;
-    readonly float _minJumpDuration = 0.1f;
+    // readonly float _maxFallingSpeed = 24;
+    // readonly float _jumpSpeed = 18;
+    // readonly float _maxJumpDuration = 0.4f;
+    // readonly float _minJumpDuration = 0.1f;
+    
     float _remainingJumpDuration;
     bool _isJumping;
 
@@ -34,14 +35,16 @@ public class FallingStrategy : MovementStrategy {
             return ctx => new StandingStrategy(ctx);
         }
 
-        var yVelocity = Mathf.Max(_ctx.rb.velocity.y, -_maxFallingSpeed);
+        var constants = _ctx.movementConstants;
+
+        var yVelocity = Mathf.Max(_ctx.rb.velocity.y, -constants.MaxFallingSpeed);
         if (_isJumping) {
             var rjd = _remainingJumpDuration;
-            if ((rjd <= 0 || !jumpContInput) && (rjd <= _maxJumpDuration - _minJumpDuration) || IsCeiled()) {
+            if ((rjd <= 0 || !jumpContInput) && (rjd <= constants.MaxJumpDuration - constants.MinJumpDuration) || IsCeiled()) {
                 _isJumping = false;
             }
             else {
-                yVelocity = _jumpSpeed;
+                yVelocity = constants.JumpSpeed;
                 _remainingJumpDuration -= deltaTime;
             }
         }
@@ -51,7 +54,7 @@ public class FallingStrategy : MovementStrategy {
          * we still should not allow objects to move into (though never colliding) the walls,
          * Y movement is fucked otherwise
          */
-        var hVelocity = hInput == nearWall ? 0 : hInput * _ctx.baseSpeed;
+        var hVelocity = hInput == nearWall ? 0 : hInput * _ctx.movementConstants.MoveSpeed;
         _ctx.rb.velocity = new Vector2(hVelocity, yVelocity);
 
         return null;
@@ -59,7 +62,7 @@ public class FallingStrategy : MovementStrategy {
 
     public override void OnStart() {
         if (_isJumping) {
-            _remainingJumpDuration = _maxJumpDuration;
+            _remainingJumpDuration = _ctx.movementConstants.MaxJumpDuration;
         }
     }
 }

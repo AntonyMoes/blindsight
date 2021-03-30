@@ -121,36 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &144403519
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 144403520}
-  m_Layer: 0
-  m_Name: Movement Constants
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &144403520
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144403519}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1495043551}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &480545005
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,11 +277,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e8815d52ae6765458b4ec0b9859315d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 12
   platformMask:
     serializedVersion: 2
     m_Bits: 256
-  physicsConstants: {fileID: 1779340197}
+  physicsConstants: {fileID: 1495043553}
+  movementConstants: {fileID: 1495043552}
   onStarts: []
   onEnds: []
   onTransitions: []
@@ -598,6 +568,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1495043551}
+  - component: {fileID: 1495043553}
+  - component: {fileID: 1495043552}
   m_Layer: 0
   m_Name: Dev Settings
   m_TagString: Untagged
@@ -615,12 +587,45 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.015729, y: 15.795833, z: -24.558739}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1779340196}
-  - {fileID: 144403520}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1495043552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495043550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea4f9b471b761da4f9a7771308e4adbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 12
+  maxFallingSpeed: 24
+  jumpSpeed: 18
+  maxJumpDuration: 0.4
+  minJumpDuration: 0.1
+  wallJumpSpeed: 32
+  wallJumpDuration: 0.35
+  wallJumpAngle: 55
+  maxWallSlidingSpeed: 6
+--- !u!114 &1495043553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495043550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7fdacb6adb74a444bf8b5f28546f063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDistToWall: 0.022
+  wallCheckDepth: 0.04
 --- !u!1 &1570083486
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,51 +832,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1657175495}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1779340195
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1779340196}
-  - component: {fileID: 1779340197}
-  m_Layer: 0
-  m_Name: Physics Constants
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1779340196
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1779340195}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1495043551}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1779340197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1779340195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7fdacb6adb74a444bf8b5f28546f063, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minDistToWall: 0.022
-  wallCheckDepth: 0.04
 --- !u!1001 &1887731864
 PrefabInstance:
   m_ObjectHideFlags: 0

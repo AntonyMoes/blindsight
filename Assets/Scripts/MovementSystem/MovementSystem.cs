@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class MovementSystem : MonoBehaviour {
-    [SerializeField] float moveSpeed = 12;
+    // [SerializeField] float moveSpeed = 12;
     
     Rigidbody2D _rb;
     BoxCollider2D _collider;
     [SerializeField] LayerMask platformMask;
     [SerializeField] PhysicsConstants physicsConstants;
+    [SerializeField] MovementConstants movementConstants;
     
     MovementStrategy.Context _ctx;
     MovementStrategy _currentStrategy;
@@ -41,7 +42,7 @@ public class MovementSystem : MonoBehaviour {
     void Start() {
         _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
-        _ctx = new MovementStrategy.Context(_rb, _collider, moveSpeed, platformMask, physicsConstants);
+        _ctx = new MovementStrategy.Context(_rb, _collider, platformMask, physicsConstants, movementConstants);
         _overlapBoxResults = new Collider2D[MaxColliders];
         InitializeCallbacks();
         SetStrategy(context => new StandingStrategy(context));

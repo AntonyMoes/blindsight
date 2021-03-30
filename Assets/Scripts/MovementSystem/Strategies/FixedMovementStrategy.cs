@@ -38,17 +38,3 @@ public abstract class FixedMovementStrategy : MovementStrategy {
         _ctx.rb.velocity = Vector2.zero;
     }
 }
-
-
-public class WallJumpStrategy : FixedMovementStrategy {
-    static readonly float _jumpSpeed = 32;
-    static readonly float _jumpDuration = 0.35f;
-    static readonly float _jumpAngle = 55;
-
-    static Vector2 GetVelocity(int wallDirection) {
-        var jumpDirection = CustomMath.Vector2FromAngle(90 + wallDirection * (90 - _jumpAngle));
-        return jumpDirection * _jumpSpeed;
-    }
-
-    public WallJumpStrategy(Context ctx, int wallDirection) : base(ctx, MovementStrategyT.WallJump, GetVelocity(wallDirection), _jumpDuration) {}
-}

@@ -13,19 +13,19 @@ public enum MovementStrategyT {
 }
 public abstract class MovementStrategy {
     public class Context {
-        public Context(Rigidbody2D rb, Collider2D collider, float baseSpeed, LayerMask platformMask, PhysicsConstants physicsConstants) {
+        public Context(Rigidbody2D rb, Collider2D collider, LayerMask platformMask, PhysicsConstants physicsConstants, MovementConstants movementConstants) {
             this.rb = rb;
             this.collider = collider;
-            this.baseSpeed = baseSpeed;
             this.platformMask = platformMask;
             this.physicsConstants = physicsConstants;
+            this.movementConstants = movementConstants;
         }
 
         public readonly Rigidbody2D rb;
         public readonly Collider2D collider;
-        public readonly float baseSpeed;
         public readonly LayerMask platformMask;
         public readonly PhysicsConstants physicsConstants;
+        public readonly MovementConstants movementConstants;
     }
 
     protected Context _ctx;
