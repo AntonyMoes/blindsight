@@ -10,6 +10,7 @@ public enum MovementStrategyT {
     WallClinging,
     CliffHanging,
     WallJump,
+    WallJumpFalling,
 }
 public abstract class MovementStrategy {
     public class Context {

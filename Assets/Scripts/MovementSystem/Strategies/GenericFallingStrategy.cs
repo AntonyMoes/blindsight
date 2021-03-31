@@ -13,7 +13,7 @@ public class SpeedTransformer {
     }
     
     public static readonly SpeedFunc JumpFunc = (float t, MovementConstants constants) => {
-        var js = constants.JumpSpeed;
+        var js = constants.JumpFallSpeed;
         if (t < 0.6) {
             return js;
         }
