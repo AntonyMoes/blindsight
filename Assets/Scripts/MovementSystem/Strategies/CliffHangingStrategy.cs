@@ -20,7 +20,7 @@ public class CliffHangingStrategy : MovementStrategy {
         
         if (jumpStartInput) {
             if (vInput == Above) {
-                return ctx => new FallingStrategy(ctx, true);
+                return ctx => new JumpStrategy(ctx);
             }
             return ctx => new WallJumpStrategy(ctx, wallDirection);
         }

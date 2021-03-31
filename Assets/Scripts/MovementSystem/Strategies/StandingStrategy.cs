@@ -17,7 +17,7 @@ public class StandingStrategy : MovementStrategy {
                 _ctx.rb.velocity = new Vector2(_ctx.rb.velocity.x, 0);
             }
 
-            return ctx => new FallingStrategy(ctx, true);
+            return ctx => new JumpStrategy(ctx);
         }
 
         var hVelocity = hInput * _ctx.movementConstants.MoveSpeed;

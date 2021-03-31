@@ -7,6 +7,7 @@ using UnityEngine;
 public enum MovementStrategyT {
     Standing,
     Falling,
+    Jump,
     WallClinging,
     CliffHanging,
     WallJump,

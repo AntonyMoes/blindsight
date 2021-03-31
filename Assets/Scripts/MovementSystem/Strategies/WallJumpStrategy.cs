@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallJumpFallingStrategy : GenericFallingStrategy {
-    static SpeedTransformer GetJumpTransformer(MovementConstants constants) {
+public class WallJumpContinueStrategy : GenericJumpStrategy {
+    static SpeedTransformer GetWallJumpTransformer(MovementConstants constants) {
         return new SpeedTransformer((t, c) => c.WallJumpSpeed, constants.WallJumpDuration / 2,
             constants.WallJumpDuration / 2);
     }
     
-    public WallJumpFallingStrategy(Context ctx) : base(ctx, MovementStrategyT.WallJumpFalling, 
-        SpeedTransformer.GetFallTransformer(ctx.movementConstants), true,
-        GetJumpTransformer(ctx.movementConstants)) { }
+    public WallJumpContinueStrategy(Context ctx) : base(ctx, MovementStrategyT.WallJumpFalling, 
+        GetWallJumpTransformer(ctx.movementConstants)) { }
 }
 
 public class WallJumpStrategy : FixedMovementStrategy {
@@ -23,7 +22,7 @@ public class WallJumpStrategy : FixedMovementStrategy {
         return new Vector2(constants.MoveSpeed * wallDirection * -1, constants.JumpFallSpeed);
     }
 
-    static Func<Context, MovementStrategy> fallingStrategyInst = context => new WallJumpFallingStrategy(context);
+    static Func<Context, MovementStrategy> fallingStrategyInst = context => new WallJumpContinueStrategy(context);
 
     public WallJumpStrategy(Context ctx, int wallDirection) : base(ctx, MovementStrategyT.WallJump, 
         GetVelocity(wallDirection, ctx.movementConstants), ctx.movementConstants.WallJumpDuration / 2, 
