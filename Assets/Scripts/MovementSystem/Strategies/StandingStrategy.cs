@@ -20,7 +20,6 @@ public class StandingStrategy : MovementStrategy {
             return ctx => new FallingStrategy(ctx, true);
         }
 
-        // TODO: do something about not being able to jump when running into wall
         var hVelocity = hInput * _ctx.movementConstants.MoveSpeed;
         _ctx.rb.velocity = new Vector2(hVelocity, _ctx.rb.velocity.y);
         return null;
