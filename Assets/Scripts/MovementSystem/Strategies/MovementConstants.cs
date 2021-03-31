@@ -19,14 +19,14 @@ public class MovementConstants : MonoBehaviour {
     public float MinJumpDuration => minJumpDuration;
     
     
-    // [SerializeField] float wallJumpSpeed = 32;
-    // public float WallJumpSpeed => wallJumpSpeed;
+    [SerializeField] float wallJumpSpeed = 24;
+    public float WallJumpSpeed => wallJumpSpeed;
     [SerializeField] float wallJumpDuration = 0.35f;
     public float WallJumpDuration => wallJumpDuration;
     // [SerializeField] float wallJumpAngle = 55;
     // public float WallJumpAngle => wallJumpAngle;
     
     
-    [SerializeField] float maxWallSlidingSpeed = 6;
-    public float MaxWallSlidingSpeed => maxWallSlidingSpeed;
+    [SerializeField] float wallSlidingSpeed = 6;
+    public float WallSlidingSpeed => wallSlidingSpeed;
 }

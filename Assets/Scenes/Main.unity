@@ -980,14 +980,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 19
-  maxFallingSpeed: 24
-  jumpSpeed: 24
-  maxJumpDuration: 0.4
+  jumpFallSpeed: 22
+  maxJumpDuration: 0.45
   minJumpDuration: 0.1
-  wallJumpSpeed: 32
+  wallJumpSpeed: 24
   wallJumpDuration: 0.35
-  wallJumpAngle: 55
-  maxWallSlidingSpeed: 6
+  wallSlidingSpeed: 10
 --- !u!114 &1495043553
 MonoBehaviour:
   m_ObjectHideFlags: 0

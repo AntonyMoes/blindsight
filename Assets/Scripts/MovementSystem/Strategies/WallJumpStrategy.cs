@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WallJumpFallingStrategy : GenericFallingStrategy {
     static SpeedTransformer GetJumpTransformer(MovementConstants constants) {
-        return new SpeedTransformer((t, c) => c.JumpFallSpeed, constants.WallJumpDuration / 2,
+        return new SpeedTransformer((t, c) => c.WallJumpSpeed, constants.WallJumpDuration / 2,
             constants.WallJumpDuration / 2);
     }
     

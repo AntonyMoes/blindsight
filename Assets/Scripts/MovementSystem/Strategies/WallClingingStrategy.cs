@@ -23,8 +23,7 @@ public class WallClingingStrategy : MovementStrategy {
             return ctx => new WallJumpStrategy(ctx, wallDirection);
         }
 
-        var maxWallSlidingSpeed = _ctx.movementConstants.MaxWallSlidingSpeed;
-        var yVelocity = Mathf.Max(_ctx.rb.velocity.y, -maxWallSlidingSpeed);
+        var yVelocity = -_ctx.movementConstants.WallSlidingSpeed;
         _ctx.rb.velocity = new Vector2(0, yVelocity);
         
         return null;
